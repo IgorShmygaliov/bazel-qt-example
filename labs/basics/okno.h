@@ -2,7 +2,9 @@
 #include "ticket.h"
 #include <QtWidgets>
 #include <QPushButton>
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
+#include <vector>
+#include <deque>
 
 
 class okno : public QWidget

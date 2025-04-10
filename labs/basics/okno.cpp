@@ -2,12 +2,23 @@
 #include "okno.h"
 
 okno::okno(QWidget *parent) : QWidget(parent){
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, Qt::black);
+    palette.setColor(QPalette::Text, Qt::black);
+    palette.setColor(QPalette::ButtonText, Qt::black);
+    palette.setColor(QPalette::ToolTipText, Qt::black); 
+    palette.setColor(QPalette::PlaceholderText, Qt::black);
+
+
+    this->setPalette(palette);
+    
     this->setStyleSheet("background: #C800C8");
     mainlayout = new QVBoxLayout();
 
     topwidget = new QWidget();
     toplayout = new QHBoxLayout();
     topwidget->setLayout(toplayout);
+    
 
     bottomwidget = new QWidget();
     bottomlayout = new QVBoxLayout(bottomwidget);
@@ -27,12 +38,15 @@ okno::okno(QWidget *parent) : QWidget(parent){
     but->setMaximum(50);
     but->setMinimum(0);
     connect(but, &QSpinBox::valueChanged, this, &okno::numtickets);
+    but->setPalette(palette);
 
     QPushButton *prev =  new QPushButton(this);
     QPushButton *next =  new QPushButton(this);
     toplayout->addWidget(but, Qt::AlignLeft);
     toplayout->addWidget(prev);
     toplayout->addWidget(next);
+    prev->setPalette(palette);
+    next->setPalette(palette);
 
     connect(prev, &QPushButton::clicked, this, &okno::prevbutton);
     connect(next, &QPushButton::clicked, this, &okno::nextbutton);
@@ -48,6 +62,7 @@ okno::okno(QWidget *parent) : QWidget(parent){
     list = new QListWidget(this);
     bottomlayout->addWidget(list);
     list->setStyleSheet("background: yellow");
+    list->setPalette(palette);
     connect(list, &QListWidget::itemClicked, [&](){tickets[list->currentRow()]->cl(true);});
     connect(list, &QListWidget::itemDoubleClicked, [&](){tickets[list->currentRow()]->dcl();});
 
@@ -56,11 +71,18 @@ okno::okno(QWidget *parent) : QWidget(parent){
     mainlayout->addWidget(totalbar);
     totalbar->setRange(0, 100);
     totalbar->setValue(42);
+    totalbar->setPalette(palette);
     greenbar = new QProgressBar;
     mainlayout->addWidget(greenbar);
     greenbar->setRange(0, 100);
     greenbar->setValue(42);
-    greenbar->setStyleSheet("background: green");
+    greenbar->setPalette(palette);
+
+    QPalette palette2 = greenbar->palette();
+    palette.setColor(QPalette::Text, Qt::black);
+    totalbar->setPalette(palette2);
+    palette2.setColor(QPalette::Highlight, QColor(0, 200, 0, 255));
+    greenbar->setPalette(palette2);
 
     setLayout(mainlayout);
 }
@@ -68,9 +90,9 @@ okno::okno(QWidget *parent) : QWidget(parent){
 void okno::updateticket(int i, QString nm){
     if (nm == "") nm = tickets[i]->name;
     ticketbuttons[i]->setText(nm);
-    if(tickets[i]->status == 0) ticketbuttons[i]->setBackground(QBrush(Qt::gray));
-    if(tickets[i]->status == 1) ticketbuttons[i]->setBackground(QBrush(Qt::yellow));
-    if(tickets[i]->status == 2) ticketbuttons[i]->setBackground(QBrush(Qt::green));
+    if(tickets[i]->status == 0) ticketbuttons[i]->setBackground(QColor(209,200,200));
+    if(tickets[i]->status == 1) ticketbuttons[i]->setBackground(Qt::yellow);
+    if(tickets[i]->status == 2) ticketbuttons[i]->setBackground(Qt::green);
 }
 
 void okno::addbilet(int n){
@@ -123,6 +145,7 @@ void okno::numtickets(int kol){
     for (int i=0;i<kol;i++){
         tickets.push_back(new ticket(i+1, this, nullptr));
         ticketbuttons.push_back(new QListWidgetItem(list));
+        ticketbuttons[i]->setForeground(Qt::black);
         updateticket(i);
     }
     updatebars();
