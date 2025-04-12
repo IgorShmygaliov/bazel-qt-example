@@ -32,7 +32,6 @@ void ticket::oneclick(bool flag){
     layout->addWidget(numberlabel, Qt::AlignCenter);
 
 
-
     QLabel *namelabel = new QLabel(questionview);
     namelabel->setText("Название: " + name);
     namelabel->setAlignment(Qt::AlignCenter);
@@ -68,13 +67,9 @@ void ticket::oneclick(bool flag){
         opened = false;
     });
 
-
-
     connect(mama, &QWidget::destroyed, questionview, &QWidget::deleteLater);
 
     questionview->show();
-
-
 };
 
 void ticket::dcl(){

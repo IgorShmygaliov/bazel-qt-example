@@ -17,4 +17,4 @@ int main(int argc, char *argv[])
 
     return QApplication::exec();
 }
-
+// 42% при нуле билетов - не баг а фича

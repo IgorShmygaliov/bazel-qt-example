@@ -14,12 +14,11 @@ private:
     okno *mama;
     int number;
     QString name;
-    int status=0; // 0-gray, 1-yellow, 2-green
+    int status = 0; // 0-gray, 1-yellow, 2-green
     bool doubleClickFlag = false;
     bool opened = false;
 private slots:
     void cl(bool flag);
     void oneclick(bool flag);
     void dcl();
-
 };

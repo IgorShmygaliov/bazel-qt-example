@@ -28,7 +28,7 @@ private:
     QVBoxLayout *bottomlayout;
     QListWidget *list;
 
-    QProgressBar *totalbar;
+    QProgressBar *yellowbar;
     QProgressBar *greenbar;
 
     std::deque<int> lasttickets;
