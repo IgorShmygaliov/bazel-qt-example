@@ -1,0 +1,93 @@
+#include "board.h"
+#include "ray.h"
+#include <numbers>
+
+board::board(QWidget* parent) : QWidget(parent) {
+    setMouseTracking(true);
+    setFocusPolicy(Qt::StrongFocus);
+    ctrl_.Mode() = 0;
+    
+}
+
+void board::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    QRect rect = this->rect();
+    painter.fillRect(rect, Qt::black);
+    if (ctrl_.GetPolygons().empty()){
+        ctrl_.AddPolygon(Polygon({rect.topLeft(), rect.topRight(),
+            rect.bottomRight(), rect.bottomLeft()}));
+        ctrl_.AddPolygon(Polygon({}));
+    }
+
+    QPointF p1 = {300,300};
+    QPointF p2 = {200,300};
+    QPointF p22 = {200,200};
+    QPointF p3 = {300,200};
+    QPointF p33 = {400,200};
+    
+    painter.setPen(QPen(Qt::red, 2)); 
+    painter.drawLine(p1,p2);
+    painter.drawLine(p22,p2);
+    painter.drawLine(p1,p3);
+    painter.drawLine(p33,p3);
+
+    Ray rrr = {{300,300},{300,400},std::numbers::pi/2};
+    painter.drawLine(rrr.GetBegin(), rrr.GetEnd());
+    rrr = rrr.Rotate(-acos(-1)/2);
+    painter.drawLine(rrr.GetBegin(), rrr.GetEnd());
+    
+
+
+    QPoint ppp = mapFromGlobal(QCursor::pos());
+    // Рисуем источник света
+    if (ctrl_.Mode() == 0){
+        painter.setBrush(Qt::red);
+        painter.setPen(Qt::NoPen);
+        int r = 5;
+        if (this->rect().contains(ppp)){
+            painter.drawEllipse(ctrl_.GetLight(), r, r);
+        }
+    }
+
+    // Рисуем многоугольники
+    painter.setPen(QPen(Qt::red, 2)); 
+    std::vector<Polygon> vp = ctrl_.GetPolygons();
+    for (int j=0; j<vp.size();j++){
+        std::vector<QPointF> vts = vp[j].Get();
+        for (int i=0; (i+1)<vts.size(); i++){
+            painter.drawLine(vts[i],vts[i+1]);
+        }
+        if (vts.size()>=1 && j != vp.size()-1){
+            painter.drawLine(vts[vts.size()-1],vts[0]);
+        }   
+        if (vts.size()>=1 && j == vp.size()-1 && this->rect().contains(ppp)){
+            painter.drawLine(vts[vts.size()-1], ppp);
+            
+        }
+    }
+    
+}
+
+void board::mouseMoveEvent(QMouseEvent* event) {
+    if (ctrl_.Mode() == 0) {
+        ctrl_.SetLight(event->pos());
+    }
+    update();
+}
+
+void board::mousePressEvent(QMouseEvent* event) {
+    if (ctrl_.Mode() == 1) {
+        if (event->button() == Qt::LeftButton) {
+            ctrl_.AddVertexToLastPolygon(event->pos());
+        }else if (event->button() == Qt::RightButton) {
+            std::vector<Polygon> vp = ctrl_.GetPolygons();
+            if (vp[vp.size()-1].Get().size()>0){
+                ctrl_.AddPolygon(Polygon({}));
+            }
+            
+        }
+    }
+    update();
+}
