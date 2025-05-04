@@ -21,22 +21,26 @@ void board::paintEvent(QPaintEvent *event) {
         ctrl_.AddPolygon(Polygon({}));
     }
 
-    QPointF p1 = {300,300};
-    QPointF p2 = {200,300};
-    QPointF p22 = {200,200};
-    QPointF p3 = {300,200};
-    QPointF p33 = {400,200};
+    // QPointF p1 = {300,300};
+    // QPointF p2 = {200,300};
+    // QPointF p22 = {200,200};
+    // QPointF p3 = {300,200};
+    // QPointF p33 = {400,200};
+    // QPointF p4 = {400,300};
+    // QPointF p44 = {400,400};
     
-    painter.setPen(QPen(Qt::red, 2)); 
-    painter.drawLine(p1,p2);
-    painter.drawLine(p22,p2);
-    painter.drawLine(p1,p3);
-    painter.drawLine(p33,p3);
+    // painter.setPen(QPen(Qt::red, 2)); 
+    // painter.drawLine(p1,p2);
+    // painter.drawLine(p22,p2);
+    // painter.drawLine(p1,p3);
+    // painter.drawLine(p33,p3);
+    // painter.drawLine(p44,{300, 400});
+    // painter.drawLine(p33,p4);
 
-    Ray rrr = {{300,300},{300,400},std::numbers::pi/2};
-    painter.drawLine(rrr.GetBegin(), rrr.GetEnd());
-    rrr = rrr.Rotate(-acos(-1)/2);
-    painter.drawLine(rrr.GetBegin(), rrr.GetEnd());
+    // Ray rrr = {{300,300},{300,400},std::numbers::pi/2};
+    // painter.drawLine(rrr.GetBegin(), rrr.GetEnd());
+    // rrr = rrr.Rotate(-acos(-1)/2);
+    // painter.drawLine(rrr.GetBegin(), rrr.GetEnd());
     
 
 
