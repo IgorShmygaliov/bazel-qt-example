@@ -29,3 +29,7 @@ void Ray::SetAngle(const double& n){
     QPointF nend = {begin_.x() + cos(na)*r, begin_.y()+sin(na)*r}; 
     return Ray{begin_,nend,na};
 }
+
+double Ray::Length(){
+    return sqrt( (begin_.x()-end_.x())*(begin_.x()-end_.x())+(begin_.y()-end_.y())*(begin_.y()-end_.y()) );
+}

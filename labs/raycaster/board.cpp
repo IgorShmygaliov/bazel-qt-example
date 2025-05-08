@@ -45,17 +45,9 @@ void board::paintEvent(QPaintEvent *event) {
 
 
     QPoint ppp = mapFromGlobal(QCursor::pos());
-    // Рисуем источник света
-    if (ctrl_.Mode() == 0){
-        painter.setBrush(Qt::red);
-        painter.setPen(Qt::NoPen);
-        int r = 5;
-        if (this->rect().contains(ppp)){
-            painter.drawEllipse(ctrl_.GetLight(), r, r);
-        }
-    }
+    
 
-    // Рисуем многоугольники
+    // многоугольники
     painter.setPen(QPen(Qt::red, 2)); 
     std::vector<Polygon> vp = ctrl_.GetPolygons();
     for (int j=0; j<vp.size();j++){
@@ -71,6 +63,36 @@ void board::paintEvent(QPaintEvent *event) {
             
         }
     }
+
+    // лучи
+    if (ctrl_.Mode() == 0){
+        painter.setPen(QPen(Qt::red, 2)); 
+        std::vector<Ray> vr = ctrl_.CastRays();
+        ctrl_.IntersectRays(&vr);
+        ctrl_.RemoveAdjacentRays(&vr);
+        for (const auto & i : vr){
+            painter.drawLine(i.GetBegin(),i.GetEnd());
+        }
+
+    }
+    // свет
+    if (ctrl_.Mode() == 0){
+        painter.setBrush(QColor("#001234"));
+        Polygon p = ctrl_.CreateLightArea();
+        const std::vector<QPointF> vv = p.Get();
+        painter.drawPolygon(vv.data(), vv.size(), Qt::OddEvenFill);
+    }
+
+    // источник света
+    if (ctrl_.Mode() == 0){
+        painter.setBrush(Qt::red);
+        painter.setPen(Qt::NoPen);
+        int r = 5;
+        if (this->rect().contains(ppp)){
+            painter.drawEllipse(ctrl_.GetLight(), r, r);
+        }
+    }
+    
     
 }
 

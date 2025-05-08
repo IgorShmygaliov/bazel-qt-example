@@ -1,4 +1,5 @@
 #include "polygon.h"
+#include "labs/raycaster/ray.h"
 
 Polygon::Polygon(const std::vector<QPointF>& vertices) : vertices_(vertices){
 }
@@ -26,8 +27,16 @@ std::optional<QPointF> Polygon::IntersectRay(const Ray& ray){
         QPointF b = vertices_[i];
         QPointF e = vertices_[(i+1)%vertices_.size()];            
         std::pair<double, double> segdel = {e.x()-b.x(),e.y()-b.y()};
-        double t2 = (raydel.first*(b.y()-ray.GetBegin().y()) + raydel.second*(ray.GetBegin().x()-b.x()))/(segdel.first*raydel.second* - segdel.second*raydel.first);
-        double t1 = (b.x()+segdel.first*t2-ray.GetBegin().x())/raydel.first;
+        if (abs(segdel.first*raydel.second - segdel.second*raydel.first) < kEps) {
+            continue;
+        }
+        double t2 = (raydel.first*(b.y()-ray.GetBegin().y()) + raydel.second*(ray.GetBegin().x()-b.x()))/(segdel.first*raydel.second - segdel.second*raydel.first);
+        double t1=0;
+        if (abs(raydel.first)<kEps){
+            t1 = (b.y()+segdel.second*t2-ray.GetBegin().y())/raydel.second;
+        }else{
+            t1 = (b.x()+segdel.first*t2-ray.GetBegin().x())/raydel.first;
+        }
         if (t1>0 && 0<t2 && t2<1) {
             mn=std::min(mn,t1);
         }

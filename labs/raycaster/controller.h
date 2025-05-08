@@ -15,6 +15,9 @@ class Controller{
 
     int& Mode();
     std::vector<Ray> CastRays();
+    void IntersectRays(std::vector<Ray>* rays);
+    void RemoveAdjacentRays(std::vector<Ray>* rays);
+    Polygon CreateLightArea();
 
    private:
     int mode_ = 0; //0-light 1-poly
