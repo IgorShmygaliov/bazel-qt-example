@@ -1,5 +1,5 @@
 #include "polygon.h"
-#include "labs/raycaster/ray.h"
+#include "ray.h"
 
 Polygon::Polygon(const std::vector<QPointF>& vertices) : vertices_(vertices){
 }
@@ -12,7 +12,7 @@ void Polygon::AddVertex(const QPointF vertex){
     vertices_.push_back(vertex);
 }
 
-void Polygon::UpdateLastVertex(const QPoint& new_vertex){
+void Polygon::UpdateLastVertex(const QPointF& new_vertex){
     if (!vertices_.empty()){
         vertices_.back() = new_vertex;
     } else { 

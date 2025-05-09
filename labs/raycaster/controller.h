@@ -5,11 +5,11 @@
 
 class Controller{
    public:
-    const std::vector<Polygon>& GetPolygons();
+    std::vector<Polygon>& GetPolygons();
     void AddPolygon(const Polygon& poly);
-    void AddVertexToLastPolygon(const QPoint& new_vertex);
+    void AddVertexToLastPolygon(const QPointF& new_vertex);
 
-    void UpdateLastPolygon(const QPoint& new_vertex);
+    void UpdateLastPolygon(const QPointF& new_vertex);
     void SetLight(const QPointF& ls);
     QPointF GetLight();
 

@@ -140,9 +140,11 @@ void board::mousePressEvent(QMouseEvent* event) {
         }else if (event->button() == Qt::RightButton) {
             std::vector<Polygon> vp = ctrl_.GetPolygons();
             if (vp[vp.size()-1].Get().size()>0){
+                QPointF pf = vp[vp.size()-1].Get()[0];
+                ctrl_.AddVertexToLastPolygon(pf);
+                std::cout << ctrl_.GetPolygons().back().Get().size() << std::endl;
                 ctrl_.AddPolygon(Polygon({}));
             }
-            
         }
     }
     update();
