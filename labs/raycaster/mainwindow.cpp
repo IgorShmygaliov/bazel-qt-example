@@ -14,8 +14,10 @@ mainwindow::mainwindow(QWidget *parent)
     topLayout = new QHBoxLayout(); // NOLINT
     button1 = new QRadioButton("Light",this); // NOLINT
     button2 = new QRadioButton("Polygons",this); // NOLINT
+    button3 = new QRadioButton("Static lights",this); // NOLINT
     topLayout->addWidget(button1);
     topLayout->addWidget(button2);
+    topLayout->addWidget(button3);
     // Нижняя часть 
     bottomLayout = new QVBoxLayout();// NOLINT
     mainboard = new board();//NOLINT
@@ -35,5 +37,6 @@ mainwindow::mainwindow(QWidget *parent)
 
     connect(button1, &QPushButton::clicked, this, [&](){mainboard->ctrl_.Mode() = 0;});
     connect(button2, &QRadioButton::clicked, this, [&](){mainboard->ctrl_.Mode() = 1;mainboard->update();});
+    connect(button3, &QRadioButton::clicked, this, [&](){mainboard->ctrl_.Mode() = 2;mainboard->update();});
     
 }

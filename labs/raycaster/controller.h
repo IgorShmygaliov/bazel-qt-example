@@ -19,8 +19,12 @@ class Controller{
     void RemoveAdjacentRays(std::vector<Ray>* rays);
     Polygon CreateLightArea();
 
+    void AddStaticLight(QPointF light);
+    std::vector<QPointF>& GetStaticLights();
+
    private:
-    int mode_ = 0; //0-light 1-poly
+    int mode_ = 0; //0-light 1-poly 2-st.lights
     std::vector<Polygon> polygons_;
     QPointF light_source_;
+    std::vector<QPointF> st_lights_;
 };

@@ -21,4 +21,5 @@ private:
 
     QRadioButton *button1;
     QRadioButton *button2;
+    QRadioButton *button3;
 };

@@ -139,3 +139,12 @@ Polygon Controller::CreateLightArea(){
     }
     return poly;
 }
+
+
+void Controller::AddStaticLight(QPointF light){
+    st_lights_.push_back(light);
+}
+
+std::vector<QPointF>& Controller::GetStaticLights(){
+    return st_lights_;
+}
