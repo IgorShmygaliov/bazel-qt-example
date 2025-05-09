@@ -1,5 +1,6 @@
 #include "board.h"
 #include "ray.h"
+#include <iostream>
 #include <numbers>
 
 board::board(QWidget* parent) : QWidget(parent) {
@@ -60,27 +61,52 @@ void board::paintEvent(QPaintEvent *event) {
         }   
         if (vts.size()>=1 && j == vp.size()-1 && this->rect().contains(ppp)){
             painter.drawLine(vts[vts.size()-1], ppp);
-            
         }
     }
 
     // лучи
-    if (ctrl_.Mode() == 0){
-        painter.setPen(QPen(Qt::red, 2)); 
-        std::vector<Ray> vr = ctrl_.CastRays();
-        ctrl_.IntersectRays(&vr);
-        ctrl_.RemoveAdjacentRays(&vr);
-        for (const auto & i : vr){
-            painter.drawLine(i.GetBegin(),i.GetEnd());
-        }
+    // if (ctrl_.Mode() == 0){
+    //     painter.setPen(QPen(QColor("#FF80A0"), 2)); 
+    //     std::vector<Ray> vr = ctrl_.CastRays();
+    //     ctrl_.IntersectRays(&vr);
+    //     ctrl_.RemoveAdjacentRays(&vr);
+    //     for (const auto & i : vr){
+    //         painter.drawLine(i.GetBegin(),i.GetEnd());
+    //     }
 
-    }
+    // }
+
+    int c=8;
+
+    QPointF mainlight = ctrl_.GetLight();
+    std::vector<QPointF> lights;
+    lights.push_back(mainlight);
+
+    lights.push_back({mainlight.x()+c,mainlight.y()+c});
+    lights.push_back({mainlight.x()+c,mainlight.y()-c});
+    lights.push_back({mainlight.x()-c,mainlight.y()+c});
+    lights.push_back({mainlight.x()-c,mainlight.y()-c});
+
+    lights.push_back({mainlight.x()+2*c,mainlight.y()});
+    lights.push_back({mainlight.x()-2*c,mainlight.y()});
+    lights.push_back({mainlight.x(),mainlight.y()+2*c});
+    lights.push_back({mainlight.x(),mainlight.y()-2*c});
+
     // свет
     if (ctrl_.Mode() == 0){
-        painter.setBrush(QColor("#001234"));
-        Polygon p = ctrl_.CreateLightArea();
-        const std::vector<QPointF> vv = p.Get();
-        painter.drawPolygon(vv.data(), vv.size(), Qt::OddEvenFill);
+        painter.setBrush(QColor("#2F8092B4"));
+        painter.setPen(Qt::NoPen);
+        for (auto lt : lights){
+            ctrl_.SetLight(lt);
+            if (lt.x() > 1 && lt.y() > 1 && lt.x() + 1 < width() && lt.y() + 1 < height()){
+                Polygon p = ctrl_.CreateLightArea();
+                const std::vector<QPointF> vv = p.Get();
+                painter.drawPolygon(vv.data(), vv.size(), Qt::OddEvenFill);
+            }
+            
+        }
+        ctrl_.SetLight(mainlight);
+        
     }
 
     // источник света
@@ -88,8 +114,10 @@ void board::paintEvent(QPaintEvent *event) {
         painter.setBrush(Qt::red);
         painter.setPen(Qt::NoPen);
         int r = 5;
-        if (this->rect().contains(ppp)){
-            painter.drawEllipse(ctrl_.GetLight(), r, r);
+        for (auto lt : lights){
+            if (lt.x() > 1 && lt.y() > 1 && lt.x() + 1 < width() && lt.y() + 1 < height()){
+                painter.drawEllipse(lt, r, r);
+            }
         }
     }
     
@@ -100,7 +128,9 @@ void board::mouseMoveEvent(QMouseEvent* event) {
     if (ctrl_.Mode() == 0) {
         ctrl_.SetLight(event->pos());
     }
-    update();
+    if (ctrl_.Mode() == 1 || (ctrl_.GetLight().x() > 1 && ctrl_.GetLight().y() > 1 && ctrl_.GetLight().x() + 1 < width() && ctrl_.GetLight().y() + 1 < height())){
+        update();
+    }
 }
 
 void board::mousePressEvent(QMouseEvent* event) {

@@ -37,7 +37,7 @@ std::optional<QPointF> Polygon::IntersectRay(const Ray& ray){
         }else{
             t1 = (b.x()+segdel.first*t2-ray.GetBegin().x())/raydel.first;
         }
-        if (t1>0 && 0<t2 && t2<1) {
+        if (t1>-kEps && -kEps<t2 && t2<1+kEps) {
             mn=std::min(mn,t1);
         }
     }

@@ -34,6 +34,6 @@ mainwindow::mainwindow(QWidget *parent)
     mainboard->show();
 
     connect(button1, &QPushButton::clicked, this, [&](){mainboard->ctrl_.Mode() = 0;});
-    connect(button2, &QRadioButton::clicked, this, [&](){mainboard->ctrl_.Mode() = 1;});
+    connect(button2, &QRadioButton::clicked, this, [&](){mainboard->ctrl_.Mode() = 1;mainboard->update();});
     
 }
